@@ -22,6 +22,7 @@ if (!isset($_SESSION["conected"]) || $_SESSION["conected"] != true) {
 </head>
 
 <body class="backgroundf min-vh-100 d-flex flex-column justify-content-center">
+    
     <div class="container bgcont rounded">
         <div class=""></div>
         <div class="m-3 "></div>

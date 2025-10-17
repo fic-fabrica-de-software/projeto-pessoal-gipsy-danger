@@ -1,8 +1,38 @@
 body {
-    overflow: hidden;
-    padding: 70px;
+    padding:7vh 20px;
+     --bg1: #254B7C;
+    --bg2: #7F9097;
+    --bg3: #2BA5CB;
+    --bg4: #9BCEEF;
+    --bg5: #F5EAE3;
+    --5t: #646464;
+    --4t: #4D4D4D;
+    --3t: #2A2A2A;
+    --2t: #090909;
+    --1t: #C3C3C3;
 }
 
 .backgroundf {
-    background-color: #5A565E;
+    background-color: var(--bg1);
+    
 }
+
+.bgcont {
+    background-color: var(--bg5);
+    height: 78vh;
+    
+}
+
+.scrolly{
+    overflow: auto;
+    scrollbar-color: #B0B199 transparent;
+    overflow-x: hidden;
+    scrollbar-width: thin;
+}
+
+html {
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+}
+

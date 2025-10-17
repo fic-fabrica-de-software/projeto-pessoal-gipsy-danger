@@ -3,7 +3,7 @@ require "connections/db.php";
 session_start();
 
 if (isset($_SESSION["user_name"])) {
-    header("Location: pages/status.php");
+    header("Location: pages/home.php");
     exit;
 }
 
@@ -14,7 +14,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $password = trim($_POST["password"] ?? "");
 
     // Busca o usuário pelo email
-    $stmt = $conn->prepare("SELECT pk_user, user_name, user_password FROM usuario WHERE user_mail = ?");
+    $stmt = $conn->prepare("SELECT user_id, user_name, user_password_hash FROM users WHERE user_email = ?");
     $stmt->bind_param("s", $email);
     $stmt->execute();
     $resultado = $stmt->get_result();
@@ -23,11 +23,11 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         $dados = $resultado->fetch_assoc();
 
         // Verifica se a senha está correta usando password_verify
-        if (password_verify($password, $dados["user_password"])) {
+        if (password_verify($password, $dados["user_password_hash"])) {
             $_SESSION["user_name"] = $dados["user_name"];
-            $_SESSION["user_id"] = $dados["pk_user"];
+            $_SESSION["user_id"] = $dados["user_id"];
             $_SESSION["conected"] = true;
-            header("Location: pages/status.php");
+            header("Location: pages/home.php");
             exit;
         } else {
             $error = "E-mail ou senha inválidos.";
@@ -53,7 +53,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 <body class="backgroundf">
     <div class="container d-flex justify-content-center align-items-center min-vh-100">
         <div class="d-flex flex-column align-items-center gap-3 p-4 rounded shadow bgform">
-            <h2>Login</h2>
+            <h2 class="">Login</h2>
             <form method="post">
                 <div class="d-flex flex-column align-items-center gap-3 fontc">
                     <input type="email" id="email" name="email" placeholder="Email" class="form-control fontc text-center" required>

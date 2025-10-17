@@ -4,8 +4,8 @@ CREATE TABLE IF NOT EXISTS users (
     user_id INT AUTO_INCREMENT PRIMARY KEY,
     user_name VARCHAR(100) NOT NULL,
     user_password_hash VARCHAR(255) NOT NULL,
-    user_email VARCHAR(100) NOT NULL UNIQUE
-    user_age INT NOT NULL,
+    user_email VARCHAR(100) NOT NULL UNIQUE,
+    user_age INT NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS medicaments (

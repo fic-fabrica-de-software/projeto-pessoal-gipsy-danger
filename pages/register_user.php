@@ -1,7 +1,7 @@
 <?php
 require "../connections/db.php";
 if (isset($_SESSION["user_name"])) {
-    header("Location: pages/status.php");
+    header("Location: pages/home.php");
     exit;
 }
 
@@ -10,10 +10,11 @@ $error = "";
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $username = $_POST["username"];
     $email = trim($_POST["email"] ?? "");
+    $age = trim($_POST["age"] ?? "");
     if (preg_match('/^.{6,26}$/', (trim($_POST["password"] ?? "")))) {
         $password = password_hash(trim($_POST["password"] ?? ""), PASSWORD_BCRYPT);
 
-        $checkEmailStmt = $conn->prepare("SELECT user_mail FROM usuario WHERE user_mail = ?");
+        $checkEmailStmt = $conn->prepare("SELECT user_email FROM users WHERE user_email = ?");
         $checkEmailStmt->bind_param("s", $email);
         $checkEmailStmt->execute();
         $checkEmailStmt->store_result();
@@ -21,8 +22,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         if ($checkEmailStmt->num_rows > 0) {
             $error = "E-mail já cadastrado.";
         } else {
-            $stmt = $conn->prepare("INSERT INTO usuario(user_name, user_mail, user_password) VALUES (?, ?, ?)");
-            $stmt->bind_param("sss", $username, $email, $password);
+            $stmt = $conn->prepare("INSERT INTO users(user_name, user_age, user_email, user_password_hash) VALUES (?, ?, ?, ?)");
+            $stmt->bind_param("ssss", $username, $age, $email, $password);
             if ($stmt->execute()) {
                 header("Location: ../index.php");
                 exit;
@@ -56,6 +57,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             <form method="post">
                 <div class="d-flex flex-column align-items-center gap-3 fontc">
                     <input type="text" id="username" name="username" placeholder="Nome de Usuário" class="form-control fontc text-center" autocomplete="off" required>
+                    <input type="number" id="age" name="age" placeholder="Idade" class="form-control fontc text-center" autocomplete="off" min="13" required>
                     <input type="email" id="email" name="email" placeholder="Email" class="form-control fontc text-center" autocomplete="off" required>
                     <input type="password" id="password" name="password" placeholder="Senha" class="form-control fontc text-center" autocomplete="off" required>
                     <a class="link" href="../index.php">Fazer Login</a>
