@@ -15,3 +15,6 @@
     color: var(--1t);
 }
 
+.display{
+    display:none;
+}

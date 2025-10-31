@@ -13,13 +13,8 @@
 
 <body>
     <div class="fixed-top acc">
-        <div class="dropdown">
-            <a class="dropdown-toggle icondrop" role="button" data-bs-toggle="dropdown"><i class="bi bi-person-circle icon"></i></a>
-            <ul class="dropdown-menu">
-                <li><a class="item" href="#">Action</a></li>
-                <li><a class="item" href="#">Another action</a></li>
-                <li><a class="item" href="#">Something else here</a></li>
-            </ul>
+        <div class="">
+            <a class="icondrop"><i class="bi bi-person-circle icon"></i></a>
         </div>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
