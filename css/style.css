@@ -1,15 +1,13 @@
 body {
     padding:7vh 20px;
-     --bg1: #254B7C;
-    --bg2: #7F9097;
-    --bg3: #2BA5CB;
-    --bg4: #9BCEEF;
+    --bg1: #273127;
+    --bg2: #89908A;
+    --bg3: #98A095;
+    --bg4: #848F84;
     --bg5: #F5EAE3;
     --5t: #646464;
-    --4t: #4D4D4D;
-    --3t: #2A2A2A;
-    --2t: #090909;
-    --1t: #C3C3C3;
+    --2t: #2A2A2A;
+    --1t: #F1F1F2;
     
 }
 
@@ -19,7 +17,7 @@ body {
 }
 
 .bgcont {
-    background-color: var(--bg5);
+    
     height: 78vh;
     
 }
@@ -43,4 +41,5 @@ html {
   font-optical-sizing: auto;
   font-weight: normal;
   font-style: normal;
+  color: var(--1t);
 }

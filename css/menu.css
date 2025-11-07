@@ -18,3 +18,8 @@
 .display{
     display:none;
 }
+
+.ofcbody{
+        --bg1: #254B7C;
+    background-color: var(--bg1) !important;
+}

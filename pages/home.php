@@ -25,32 +25,37 @@ if (!isset($_SESSION["conected"]) || $_SESSION["conected"] != true) {
 </head>
 
 <body class="backgroundf min-vh-100 d-flex flex-column justify-content-center">
-    <div class="container bgcont rounded p-4 d-flex flex-column gap-4">
-        <div class="w-100 h-100 d-flex align-items-center gap-4">
-            <div class="bg-danger w-100 h-100 rounded medout"></div>
-            <div class="bg-danger w-100 h-100 rounded "></div>
-            <div class="bg-danger w-100 h-100 rounded"></div>
+    <div class="container bgcont rounded d-flex flex-column gap-4">
+        <div class="w-100 d-flex align-items-bottom justify-content-evenly p-2">
+
+            <div class="bg-danger w-25 rounded medout"></div>
+
+            <div class="w-50 d-flex justify-content-evenly align-items-center">
+                <div class="w-100 attboxh d-flex flex-column bg-success">
+                    <div class="w-100 d-flex align-items-center">
+                        <h3 class="montserrat">Próximos Medicamentos</h3>
+                    </div>
+                    <div class="bg-danger w-100  rounded">
+                    </div>
+                </div>
+            </div>
+
         </div>
-        <div class="w-100 h-100 d-flex align-items-center gap-4">
-            <div class="w-100 h-100 d-flex justify-content-evenly align-items-center">
+        <!-- <div class="w-100 h-100 d-flex align-items-end justify-content-evenly p-2">
+
+            <div class="w-50 h-100 d-flex justify-content-evenly align-items-center">
                 <div class="w-100 h-100 d-flex flex-column">
-                    <div class="w-100 d-flex justify-content-between align-items-center">
+                    <div class="w-100 d-flex align-items-center">
                         <h3 class="montserrat">Próximos Medicamentos</h3>
                     </div>
                     <div class="bg-danger w-100 h-100 rounded">
                     </div>
                 </div>
             </div>
-            <div class="w-100 h-100 d-flex justify-content-evenly align-items-center">
-                <div class="w-100 h-100 d-flex flex-column">
-                    <div class="w-100 d-flex justify-content-between align-items-center">
-                        <h3 class="text">Próximos Consultas</h3>
-                    </div>
-                    <div class="bg-danger w-100 h-100 rounded">
-                    </div>
-                </div>
-            </div>
-        </div>
+
+            <div class="bg-danger w-25 h-100 rounded medout"></div>
+
+        </div> -->
     </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
 </body>

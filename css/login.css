@@ -1,26 +1,31 @@
 .bgform{
-    background-color: var(--bg5);
+    background-color: var(--bg2);
 }
 
 .fontc{
-    color: var(--5t);
+    color: var(--5t) !important;
 }
 
 .btf{
-    background-color: var(--bg4);
-    color: var(--4t);
+    background-color: var(--bg5);
+    color: var(--2t);
     border: none;
-    width: 90%;
-    border-radius: 20px;
+    width: 40%;
+    border-radius: 30px;
     padding: 5px;
 }
 
 .link{
-    color: var(--bg2);
+    color:rgb(55, 61, 54);
     
 }
 .link:hover{
     color: var(--2t);
+}
+
+input{
+    background-color: var(--bg3) !important;
+    border: none !important;
 }
 
 input:focus::placeholder{
@@ -56,7 +61,5 @@ input:focus::-webkit-inner-spin-button {
 body{
     margin: 0;
     padding: 0;
-   
-    
 }
 
