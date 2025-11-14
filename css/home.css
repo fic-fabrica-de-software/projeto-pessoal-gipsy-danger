@@ -1,9 +1,3 @@
 .text{
     color: var(--5t);
 }
-
-.attboxh{
-    background-color: var(--bg3);
-    height: 40vh !important;
-    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
-}

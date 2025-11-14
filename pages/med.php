@@ -15,7 +15,7 @@ if (!isset($_SESSION["conected"]) || $_SESSION["conected"] != true) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="../css/style.css">
-    <link rel="stylesheet" href="../css/status.css">
+    <link rel="stylesheet" href="../css/medatt.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Momo+Trust+Sans:wght@200..800&family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
@@ -25,36 +25,16 @@ if (!isset($_SESSION["conected"]) || $_SESSION["conected"] != true) {
 </head>
 
 <body class="backgroundf min-vh-100 d-flex flex-column justify-content-center">
-    <div class="container bgcont rounded d-flex flex-column gap-4">
-        <div class="w-100 h-50 d-flex align-items-bottom justify-content-evenly p-2">
-
-            <div class="bg-danger w-25 rounded medout"></div>
-
-            <div class="w-50 h-100 d-flex justify-content-evenly">
-                <div class="w-100 h-100 d-flex flex-column">
-                    <div class="w-100 d-flex align-items-center p-2">
-                        <h3 class="montserrat w-100 m-0 text-end">Próximos Medicamentos</h3>
-                    </div>
-                    <div class="bg-danger w-100 h-100 rounded" >
-                    </div>
-                </div>
+    <div class="container bgcont rounded d-flex gap-4">
+        <div class="w-75 h-100 bg-danger">
+            <div class="w-100 d-flex align-items-center">
+                <h3 class="montserrat m-0">Medicamentos</h3>
             </div>
 
         </div>
-        <div class="w-100 h-50 d-flex align-items-end justify-content-evenly p-2">
-
-            <div class="w-50 h-100 d-flex justify-content-evenly align-items-center">
-                <div class="w-100 h-100 d-flex flex-column">
-                    <div class="w-100 d-flex align-items-center">
-                        <h3 class="montserrat">Próximos Medicamentos</h3>
-                    </div>
-                    <div class="bg-danger w-100 h-100 rounded scrolly">
-                    </div>
-                </div>
-            </div>
-
-            <div class="bg-danger w-25 h-100 rounded medout"></div>
-
+        <div class="w-25 h-100 d-flex flex-column">
+            <div class="h-100 w-100 bg-danger mb-3"></div>
+            <div class="h-100 w-100 bg-danger mt-3"></div>
         </div>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>

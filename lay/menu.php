@@ -26,11 +26,9 @@
                 <div class="offcanvas-body ofcbody">
                     <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
                         <li class="nav-item">
-                            <a class="nav-link" href="../pages/home.php">Dashboard</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="../pages/med.php">Medicamentos</a>
-                            <a class="nav-link" href="../pages/att.php">Consultas</a>
+                            <a class="nav-link fs-5" href="../pages/home.php">Dashboard</a>
+                            <a class="nav-link fs-5" href="../pages/med.php">Medicamentos</a>
+                            <a class="nav-link fs-5" href="../pages/att.php">Consultas</a>
                         </li>
                     </ul>
                 </div>
