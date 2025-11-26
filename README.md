@@ -1,5 +1,2 @@
 # MedSet
-Medicaments Manager, Reminder
-
-DB construction
-Organising Ideas
+Medicaments Manager

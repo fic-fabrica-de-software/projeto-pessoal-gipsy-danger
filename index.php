@@ -1,41 +1,19 @@
 <?php
-require "connections/db.php";
 session_start();
-
-if (isset($_SESSION["user_name"])) {
-    header("Location: pages/home.php");
-    exit;
-}
-
 $error = "";
 
-if ($_SERVER["REQUEST_METHOD"] === "POST") {
-    $email = trim($_POST["email"] ?? "");
-    $password = trim($_POST["password"] ?? "");
+if (isset($_SESSION['error'])) {
+    $error = $_SESSION['error'] ?? '';
+    unset($_SESSION['error']);
+}
 
-    // Busca o usuário pelo email
-    $stmt = $conn->prepare("SELECT user_id, user_name, user_password_hash FROM users WHERE user_email = ?");
-    $stmt->bind_param("s", $email);
-    $stmt->execute();
-    $resultado = $stmt->get_result();
-
-    if ($resultado->num_rows === 1) {
-        $dados = $resultado->fetch_assoc();
-
-        // Verifica se a senha está correta usando password_verify
-        if (password_verify($password, $dados["user_password_hash"])) {
-            $_SESSION["user_name"] = $dados["user_name"];
-            $_SESSION["user_id"] = $dados["user_id"];
-            $_SESSION["conected"] = true;
-            header("Location: pages/home.php");
-            exit;
-        } else {
-            $error = "E-mail ou senha inválidos.";
-        }
-    } else {
-        $error = "E-mail ou senha inválidos.";
+if (isset($_SESSION["user_name"]) && isset($_SESSION["conected"])) {
+    if ($_SESSION["conected"] == true) {
+        header("Location: pages/home.php");
+        exit;
     }
 }
+
 ?>
 <!DOCTYPE html>
 <html lang="pt-BR">
@@ -54,7 +32,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     <div class="container d-flex justify-content-center align-items-center min-vh-100">
         <div class="d-flex flex-column align-items-center gap-3 p-4 rounded shadow bgform">
             <h2 class="">Login</h2>
-            <form method="post">
+            <form method="post" action="connections/login.php">
                 <div class="d-flex flex-column align-items-center gap-3 fontc">
                     <input type="email" id="email" name="email" placeholder="Email" class="form-control fontc text-center" required>
                     <input type="password" id="password" name="password" placeholder="Senha" class="form-control fontc text-center" required>

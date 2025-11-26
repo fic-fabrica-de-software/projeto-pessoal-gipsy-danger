@@ -1,38 +1,16 @@
 <?php
-require "../connections/db.php";
-if (isset($_SESSION["user_name"])) {
-    header("Location: pages/home.php");
-    exit;
-}
-
+session_start();
 $error = "";
 
-if ($_SERVER["REQUEST_METHOD"] === "POST") {
-    $username = $_POST["username"];
-    $email = trim($_POST["email"] ?? "");
-    $age = trim($_POST["age"] ?? "");
-    if (preg_match('/^.{6,26}$/', (trim($_POST["password"] ?? "")))) {
-        $password = password_hash(trim($_POST["password"] ?? ""), PASSWORD_BCRYPT);
+if (isset($_SESSION['error'])) {
+    $error = $_SESSION['error'] ?? '';
+    unset($_SESSION['error']);
+}
 
-        $checkEmailStmt = $conn->prepare("SELECT user_email FROM users WHERE user_email = ?");
-        $checkEmailStmt->bind_param("s", $email);
-        $checkEmailStmt->execute();
-        $checkEmailStmt->store_result();
-
-        if ($checkEmailStmt->num_rows > 0) {
-            $error = "E-mail já cadastrado.";
-        } else {
-            $stmt = $conn->prepare("INSERT INTO users(user_name, user_age, user_email, user_password_hash) VALUES (?, ?, ?, ?)");
-            $stmt->bind_param("ssss", $username, $age, $email, $password);
-            if ($stmt->execute()) {
-                header("Location: ../index.php");
-                exit;
-            } else {
-                $error = "Erro ao cadastrar usuário.";
-            }
-        }
-    } else {
-        $error = "A senha deve conter entre 6 e 26 caracteres alfabéticos.";
+if (isset($_SESSION["user_name"]) && isset($_SESSION["conected"])) {
+    if ($_SESSION["conected"] == true) {
+        header("Location: pages/home.php");
+        exit;
     }
 }
 ?>
@@ -54,10 +32,9 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     <div class="container d-flex justify-content-center align-items-center min-vh-100">
         <div class="d-flex flex-column align-items-center gap-3 p-4 rounded shadow bgform">
             <h2 class="">Cadastro</h2>
-            <form method="post">
+            <form method="post" action="../connections/register.php">
                 <div class="d-flex flex-column align-items-center gap-3 fontc">
                     <input type="text" id="username" name="username" placeholder="Nome de Usuário" class="form-control fontc text-center" autocomplete="off" required>
-                    <input type="number" id="age" name="age" placeholder="Idade" class="form-control fontc text-center" autocomplete="off" min="13" required>
                     <input type="email" id="email" name="email" placeholder="Email" class="form-control fontc text-center" autocomplete="off" required>
                     <input type="password" id="password" name="password" placeholder="Senha" class="form-control fontc text-center" autocomplete="off" required>
                     <a class="link" href="../index.php">Fazer Login</a>

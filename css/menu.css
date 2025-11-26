@@ -7,19 +7,33 @@
 
 .icon{
     font-size:30px;
-    color: var(--1t);
 }
 
 .icondrop{
     font-size: 20px;
-    color: var(--1t);
 }
 
 .display{
     display:none;
 }
 
-.ofcbody{
-        --bg1: #254B7C;
-    background-color: var(--bg1) !important;
+.nav-item:hover{
+    transform: translateX(25px);
+    transition: all 0.3s ease-in-out;
+    list-style: upper-roman;
+}
+
+.nav-item::marker{
+    color: var(--1t);
+    font-size: larger;
+}
+
+.iconperfil{
+    font-size: 40px;
+}
+
+.perfil:hover{
+    cursor: pointer;
+    transform: scale(0.95);
+    transition: all 0.4s ease-in-out;
 }

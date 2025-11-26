@@ -1,31 +1,49 @@
 body {
     padding:7vh 20px;
-    --bg1: #273127;
-    --bg2: #89908A;
-    --bg3: #98A095;
-    --bg4: #848F84;
-    --bg5: #F5EAE3;
-    --5t: #646464;
-    --2t: #2A2A2A;
+    --bg1: #66796B;
+    --bg2: #BA8E7A;
+    --bg3: #EFDFCC;
+    --bg4: #D7A184;
+    --bg5: #D4C2AD;
+    --2t: #292929;
     --1t: #F1F1F2;
     
 }
 
-.backgroundf {
-    background-color: var(--bg1);
-    
+.bg1 {
+    background-color: var(--bg1) !important;
+}
+.bg2 {
+    background-color: var(--bg2) !important;
+}
+.bg3 {
+    background-color: var(--bg3) !important;
+}
+.bg4 {
+    background-color: var(--bg4) !important;
+}
+.bg5 {
+    background-color: var(--bg5) !important;
+}
+.t2 {
+    color: var(--2t) !important;
+}
+.t1 {
+    color: var(--1t) !important;
+}
+
+*{
+    font-family: "Nunito", sans-serif !important;
+    color: var(--2t) !important;
 }
 
 .bgcont {
-    
     height: 78vh;
-    
 }
 
-.scrolly{
+.scrolly {
     overflow: auto;
-    scrollbar-color: #B0B199 transparent;
-    overflow-x: hidden;
+    scrollbar-color: var(--bg3) transparent;
     scrollbar-width: thin;
 }
 
@@ -33,13 +51,4 @@ html {
     margin: 0;
     padding: 0;
     overflow: hidden;
-}
-
-
-.montserrat {
-  font-family: "Montserrat", sans-serif;
-  font-optical-sizing: auto;
-  font-weight: normal;
-  font-style: normal;
-  color: var(--1t);
 }

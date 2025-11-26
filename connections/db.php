@@ -2,9 +2,9 @@
 // conexao.php
 // Conexão simples ao MySQL usando mysqli (XAMPP). Ajuste usuário/senha se necessário.
 
-$host     = "localhost";
+$host     = "localhost:3307";
 $usuario  = "root";
-$senha    = "root";
+$senha    = "";
 $banco    = "medset";
 
 // Cria a conexão
@@ -16,6 +16,8 @@ if ($conn->connect_error) {
 }
 
 $stmt=$conn->prepare("ALTER TABLE users AUTO_INCREMENT = 1");
+$stmt->execute();
+$stmt=$conn->prepare("ALTER TABLE medicaments AUTO_INCREMENT = 1");
 $stmt->execute();
 
 // Força charset utf8 para acentuação
