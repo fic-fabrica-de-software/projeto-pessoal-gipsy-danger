@@ -20,8 +20,6 @@ $stmt->execute();
 $stmt=$conn->prepare("ALTER TABLE medicaments AUTO_INCREMENT = 1");
 $stmt->execute();
 
-// Força charset utf8 para acentuação
 $conn->set_charset("utf8");
 
-// Opcional: define timezone (se for importante para consultas/datas)
 date_default_timezone_set("America/Sao_Paulo");

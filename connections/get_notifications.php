@@ -1,5 +1,4 @@
 <?php
-// connections/get_notifications.php
 require_once "db.php";
 require_once "common_functions.php";
 session_start();
@@ -14,7 +13,6 @@ if (!isset($_SESSION["conected"]) || $_SESSION["conected"] !== true) {
 $user_id = $_SESSION["user_id"];
 
 try {
-    // Buscar notificações não lidas + últimas 5 notificações
     $notif_stmt = $conn->prepare("
         SELECT * FROM notifications 
         WHERE user_id = ? 

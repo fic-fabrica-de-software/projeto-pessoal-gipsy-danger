@@ -75,13 +75,11 @@
     font-weight: 500;
 }
 
-/* Loading states */
 .loading {
     opacity: 0.6;
     pointer-events: none;
 }
 
-/* Responsive adjustments */
 @media (max-width: 768px) {
     .bgcont {
         margin: 10px;
@@ -102,7 +100,6 @@
     }
 }
 
-/* Animation for confirmed medications */
 @keyframes confirmAnimation {
     0% { transform: scale(1); }
     50% { transform: scale(1.1); }
@@ -114,7 +111,6 @@
     background-color: #d4edda !important;
 }
 
-/* Custom scrollbar for scrolly class */
 .scrolly::-webkit-scrollbar {
     width: 6px;
 }
@@ -132,7 +128,6 @@
     background: var(--bg1);
 }
 
-/* Status indicators */
 .status-pending {
     color: #856404;
     background-color: #fff3cd;
@@ -151,7 +146,6 @@
     border-color: #f5c6cb;
 }
 
-/* Print styles */
 @media print {
     .btn, .modal, .navbar {
         display: none !important;

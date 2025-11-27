@@ -1,8 +1,6 @@
 <?php
-// pages/modals/add_med_modal.php
 require_once("../connections/db.php");
 
-// Buscar médicos para o select
 $user_id = $_SESSION["user_id"];
 $doctors = [];
 
@@ -17,7 +15,6 @@ while ($doctor = $doctor_result->fetch_assoc()) {
 $doctor_stmt->close();
 ?>
 
-<!-- Modal Adicionar Medicamento -->
 <div class="modal fade" id="addMedModal" tabindex="-1" aria-labelledby="addMedModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
@@ -30,7 +27,6 @@ $doctor_stmt->close();
                     <div id="formAlerts"></div>
 
                     <div class="row">
-                        <!-- Informações Básicas -->
                         <div class="col-md-6">
                             <h6 class="border-bottom pb-2 text-primary">Informações Básicas</h6>
 
@@ -108,7 +104,6 @@ $doctor_stmt->close();
                             </div>
                         </div>
 
-                        <!-- Horários e Frequência -->
                         <div class="col-md-6">
                             <h6 class="border-bottom pb-2 text-primary">Horários e Frequência</h6>
 
@@ -166,7 +161,6 @@ $doctor_stmt->close();
                         </div>
                     </div>
 
-                    <!-- Informações Adicionais -->
                     <div class="row mt-3">
                         <div class="col-12">
                             <h6 class="border-bottom pb-2 text-primary">Controle de Estoque</h6>
@@ -279,26 +273,19 @@ $doctor_stmt->close();
     }
 
     $('#med_remaining, #med_frequency, #med_alert_days').on('change', calculateRemainingDays);
-    // JavaScript para o modal de adicionar medicamento
     $(document).ready(function () {
-        // Configurar datas mínimas
         const today = new Date().toISOString().split('T')[0];
         $('#med_begindate').attr('min', today);
         $('#med_enddate').attr('min', today);
         $('#med_expirydate').attr('min', today);
-
-        // Validação do formulário
         $('#addMedForm').on('submit', function (e) {
             e.preventDefault();
-
-            // Validar dias da semana
             const checkedDays = $('.day-checkbox:checked').length;
             if (checkedDays === 0) {
                 showFormAlert('Selecione pelo menos um dia da semana', 'danger');
                 return;
             }
 
-            // Validar datas
             const beginDate = $('#med_begindate').val();
             const endDate = $('#med_enddate').val();
             if (beginDate && endDate && beginDate > endDate) {
@@ -309,7 +296,6 @@ $doctor_stmt->close();
             submitForm();
         });
 
-        // Limpar alertas ao fechar modal
         $('#addMedModal').on('hidden.bs.modal', function () {
             $('#formAlerts').empty();
             $('#addMedForm')[0].reset();
@@ -333,12 +319,9 @@ $doctor_stmt->close();
             success: function (data) {
                 if (data.success) {
                     showFormAlert(data.message, 'success');
-
-                    // Fechar modal após 1.5 segundos
                     setTimeout(() => {
                         $('#addMedModal').modal('hide');
 
-                        // Recarregar a página ou atualizar dados
                         if (typeof medManager !== 'undefined') {
                             medManager.loadMedications();
                         }
@@ -347,7 +330,6 @@ $doctor_stmt->close();
                             dashboard.loadStats();
                         }
 
-                        // Mostrar alerta global
                         if (typeof showAlert === 'function') {
                             showAlert(data.message, 'success');
                         }
@@ -376,13 +358,11 @@ $doctor_stmt->close();
 
         $('#formAlerts').html(alert);
 
-        // Auto-remove após 5 segundos
         setTimeout(() => {
             alert.alert('close');
         }, 5000);
     }
 
-    // Funções auxiliares para validação
     function validateDates() {
         const beginDate = $('#med_begindate').val();
         const endDate = $('#med_enddate').val();
@@ -405,10 +385,8 @@ $doctor_stmt->close();
         }
     }
 
-    // Adicionar validação em tempo real para datas
     $('#med_begindate, #med_enddate, #med_expirydate').on('change', validateDates);
 
-    // Marcar/desmarcar todos os dias
     function selectAllDays() {
         $('.day-checkbox').prop('checked', true);
     }
@@ -417,20 +395,6 @@ $doctor_stmt->close();
         $('.day-checkbox').prop('checked', false);
     }
 
-    // Adicionar botões de seleção rápida (opcional)
-    function addQuickSelectButtons() {
-        const daysContainer = $('.day-checkbox').first().closest('.mb-3');
-        daysContainer.before(`
-        <div class="mb-2">
-            <button type="button" class="btn btn-sm btn-outline-secondary me-1" onclick="selectAllDays()">
-                <i class="bi bi-check-all"></i> Todos
-            </button>
-            <button type="button" class="btn btn-sm btn-outline-secondary" onclick="clearAllDays()">
-                <i class="bi bi-x-circle"></i> Limpar
-            </button>
-        </div>
-    `);
-    }
     $('#med_acquisition_type').on('change', function () {
         const acquisitionType = $(this).val();
         const alertDaysInput = $('#med_alert_days');
@@ -447,6 +411,4 @@ $doctor_stmt->close();
             );
         }
     });
-    // Inicializar botões de seleção rápida
-    addQuickSelectButtons();
 </script>

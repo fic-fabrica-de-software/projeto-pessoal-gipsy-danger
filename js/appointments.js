@@ -1,6 +1,4 @@
-// js/appointments.js
 document.addEventListener('DOMContentLoaded', function() {
-    // Carregar médicos no select
     const doctorSelect = document.getElementById('doctor_id');
     if (doctorSelect) {
         doctorsData.forEach(doctor => {
@@ -11,7 +9,6 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    // Carregar próximas consultas
     const upcomingContainer = document.getElementById('upcomingAppointments');
     if (upcomingContainer && upcomingAppointmentsData.length > 0) {
         upcomingAppointmentsData.forEach(appointment => {
@@ -20,7 +17,6 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    // Carregar todas as consultas na tabela
     const allAppointmentsContainer = document.getElementById('allAppointments');
     if (allAppointmentsContainer && appointmentsData.length > 0) {
         appointmentsData.forEach(appointment => {
@@ -29,7 +25,6 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    // Verificar alertas da sessão
     checkSessionAlerts();
 });
 
@@ -43,7 +38,6 @@ function createAppointmentCard(appointment) {
     const cardBody = document.createElement('div');
     cardBody.className = 'card-body';
     
-    // Formatar data
     const appointmentDate = new Date(appointment.appointment_date + 'T' + appointment.appointment_time);
     const today = new Date();
     const isToday = appointmentDate.toDateString() === today.toDateString();
@@ -121,7 +115,6 @@ function getAppointmentType(type) {
 }
 
 function checkSessionAlerts() {
-    // Verificar se há alertas na sessão (implementar conforme necessidade)
     const urlParams = new URLSearchParams(window.location.search);
     if (urlParams.get('success')) {
         showAlert(urlParams.get('success'), 'success');

@@ -1,16 +1,14 @@
 <?php
-// appointments.php
 session_start();
 include("../lay/menu.php");
 require_once("../connections/db.php");
-require_once("../connections/security_functions.php");
+require_once("../connections/common_functions.php");
 
 if (!isset($_SESSION["conected"]) || $_SESSION["conected"] != true) {
     header("Location: ../index.php");
     exit;
 }
 
-// Buscar consultas do usuário
 $user_id = $_SESSION["user_id"];
 $appointments = [];
 $upcoming_appointments = [];
@@ -29,7 +27,6 @@ $result = $stmt->get_result();
 if ($result && $result->num_rows > 0) {
     $appointments = $result->fetch_all(MYSQLI_ASSOC);
     
-    // Filtrar próximas consultas (próximos 30 dias)
     $today = date('Y-m-d');
     $next_month = date('Y-m-d', strtotime('+30 days'));
     
@@ -41,7 +38,6 @@ if ($result && $result->num_rows > 0) {
 }
 $stmt->close();
 
-// Preparar dados para o HTML
 $has_appointments = !empty($appointments);
 $has_upcoming = !empty($upcoming_appointments);
 ?>
@@ -51,19 +47,12 @@ $has_upcoming = !empty($upcoming_appointments);
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="../css/style.css">
     <link rel="stylesheet" href="../css/medatt.css">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200..1000;1,200..1000&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
     <title>Consultas - MedSet</title>
 </head>
 
 <body class="backgroundf min-vh-100">
     <div class="container-fluid py-4">
-        <!-- Alertas -->
         <div id="alertContainer"></div>
 
         <div class="row">
@@ -76,12 +65,10 @@ $has_upcoming = !empty($upcoming_appointments);
                         </button>
                     </div>
 
-                    <!-- Próximas Consultas -->
                     <div class="mb-5">
                         <h5 class="mb-3">Próximas Consultas</h5>
                         <?php if ($has_upcoming): ?>
                             <div class="row" id="upcomingAppointments">
-                                <!-- As consultas serão carregadas via JavaScript -->
                             </div>
                         <?php else: ?>
                             <div class="text-center py-4">
@@ -91,7 +78,6 @@ $has_upcoming = !empty($upcoming_appointments);
                         <?php endif; ?>
                     </div>
 
-                    <!-- Todas as Consultas -->
                     <div>
                         <h5 class="mb-3">Todas as Consultas</h5>
                         <?php if ($has_appointments): ?>
@@ -108,7 +94,6 @@ $has_upcoming = !empty($upcoming_appointments);
                                         </tr>
                                     </thead>
                                     <tbody id="allAppointments">
-                                        <!-- As consultas serão carregadas via JavaScript -->
                                     </tbody>
                                 </table>
                             </div>
@@ -125,7 +110,6 @@ $has_upcoming = !empty($upcoming_appointments);
         </div>
     </div>
 
-    <!-- Modal Adicionar Consulta -->
     <div class="modal fade" id="addAppointmentModal" tabindex="-1" aria-labelledby="addAppointmentModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -161,7 +145,6 @@ $has_upcoming = !empty($upcoming_appointments);
                             <label for="doctor_id" class="form-label">Médico</label>
                             <select class="form-select" id="doctor_id" name="doctor_id">
                                 <option value="">Selecione um médico...</option>
-                                <!-- Opções serão carregadas via JavaScript -->
                             </select>
                         </div>
                         <div class="mb-3">
@@ -184,7 +167,6 @@ $has_upcoming = !empty($upcoming_appointments);
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
     
-    <!-- Dados para JavaScript -->
     <script>
         const appointmentsData = <?= json_encode($appointments) ?>;
         const upcomingAppointmentsData = <?= json_encode($upcoming_appointments) ?>;

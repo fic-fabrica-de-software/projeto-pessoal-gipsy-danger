@@ -1,5 +1,4 @@
 <?php
-// connections/create_appointment.php
 require_once "db.php";
 require_once "common_functions.php";
 session_start();

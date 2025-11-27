@@ -1,5 +1,4 @@
 <?php
-// connections/mark_alert_read.php
 require_once "db.php";
 require_once "common_functions.php";
 session_start();
@@ -21,7 +20,6 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     }
 
     try {
-        // Verificar se o alerta pertence ao usuário
         $check_stmt = $conn->prepare("
             SELECT alert_id FROM stock_alerts 
             WHERE alert_id = ? AND user_id = ?
@@ -35,7 +33,6 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             exit;
         }
 
-        // Marcar como lido
         $update_stmt = $conn->prepare("UPDATE stock_alerts SET is_read = TRUE WHERE alert_id = ?");
         $update_stmt->bind_param("i", $alert_id);
         

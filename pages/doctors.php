@@ -9,7 +9,6 @@ if (!isset($_SESSION["conected"]) || $_SESSION["conected"] != true) {
     exit;
 }
 
-// Buscar médicos do usuário
 $user_id = $_SESSION["user_id"];
 $doctors = [];
 
@@ -41,7 +40,6 @@ $stmt->close();
 
 <body class="backgroundf min-vh-100">
     <div class="container-fluid py-4">
-        <!-- Alertas -->
         <?php if (isset($_SESSION['success'])): ?>
             <div class="alert alert-success alert-dismissible fade show" role="alert">
                 <?= $_SESSION['success']; ?>
@@ -110,7 +108,6 @@ $stmt->close();
         </div>
     </div>
 
-    <!-- Modal Adicionar Médico -->
     <div class="modal fade" id="addDoctorModal" tabindex="-1" aria-labelledby="addDoctorModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">

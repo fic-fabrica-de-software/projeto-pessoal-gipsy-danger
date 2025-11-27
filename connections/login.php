@@ -8,7 +8,6 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $email = trim($_POST["email"] ?? "");
     $password = trim($_POST["password"] ?? "");
 
-    // Busca o usuário pelo email
     $stmt = $conn->prepare("SELECT user_id, user_name, user_password_hash FROM users WHERE user_email = ?");
     $stmt->bind_param("s", $email);
     $stmt->execute();
@@ -17,7 +16,6 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     if ($resultado->num_rows === 1) {
         $dados = $resultado->fetch_assoc();
 
-        // Verifica se a senha está correta usando password_verify
         if (password_verify($password, $dados["user_password_hash"])) {
             $_SESSION["user_name"] = $dados["user_name"];
             $_SESSION["user_id"] = $dados["user_id"];

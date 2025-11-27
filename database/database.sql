@@ -1,4 +1,3 @@
--- database.sql (atualizado com histórico)
 CREATE DATABASE IF NOT EXISTS medset;
 USE medset;
 
@@ -34,7 +33,8 @@ CREATE TABLE IF NOT EXISTS appointments (
     user_id INT NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (doctor_id) REFERENCES doctors(doctor_id) ON DELETE SET NULL,
-    FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE
+    FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE,
+    INDEX idx_user_date (user_id, appointment_date)
 );
 
 CREATE TABLE IF NOT EXISTS medicaments (
@@ -49,23 +49,24 @@ CREATE TABLE IF NOT EXISTS medicaments (
     med_milligram DECIMAL(10,2) NOT NULL,
     med_milligram_unit VARCHAR(50) NOT NULL,
     med_time TIME NOT NULL,
-    med_weekday INT NOT NULL,
+    med_weekdays VARCHAR(20) NOT NULL COMMENT 'Dias da semana como string separada por vírgulas: 0,1,2,3,4,5,6',
     med_frequency VARCHAR(50) DEFAULT 'diario',
-    med_remaining INT,
+    med_acquisition_type ENUM('comprado', 'manipulado') DEFAULT 'comprado',
+    med_remaining INT DEFAULT 0,
+    med_alert_days INT DEFAULT 7,
     med_price DECIMAL(10,2),
     med_place_purchase VARCHAR(255),
     med_notes TEXT,
+    med_is_active BOOLEAN DEFAULT TRUE,
+    med_last_alert_date DATE,
     doctor_id INT,
     user_id INT NOT NULL,
-    med_acquisition_type ENUM('comprado', 'manipulado') DEFAULT 'comprado',
-    med_alert_days INT DEFAULT 7,
-    med_last_alert_date DATE,
-    med_is_active BOOLEAN DEFAULT TRUE,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (doctor_id) REFERENCES doctors(doctor_id) ON DELETE SET NULL,
     FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE,
     INDEX idx_user_med (user_id, med_time),
-    INDEX idx_user_weekday (user_id, med_weekday)
+    INDEX idx_med_weekdays (med_weekdays),
+    INDEX idx_user_active (user_id, med_is_active)
 );
 
 CREATE TABLE IF NOT EXISTS medication_history (
@@ -80,7 +81,22 @@ CREATE TABLE IF NOT EXISTS medication_history (
     FOREIGN KEY (med_id) REFERENCES medicaments(med_id) ON DELETE CASCADE,
     FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE,
     INDEX idx_user_date (user_id, taken_date),
-    INDEX idx_med_date (med_id, taken_date)
+    INDEX idx_med_date (med_id, taken_date),
+    UNIQUE KEY unique_med_date (med_id, taken_date, user_id)
+);
+
+CREATE TABLE IF NOT EXISTS stock_alerts (
+    alert_id INT AUTO_INCREMENT PRIMARY KEY,
+    med_id INT NOT NULL,
+    user_id INT NOT NULL,
+    alert_type ENUM('low_stock', 'expiring', 'out_of_stock') DEFAULT 'low_stock',
+    alert_message TEXT NOT NULL,
+    is_read BOOLEAN DEFAULT FALSE,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (med_id) REFERENCES medicaments(med_id) ON DELETE CASCADE,
+    FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE,
+    INDEX idx_user_alert (user_id, is_read),
+    INDEX idx_created_at (created_at)
 );
 
 CREATE TABLE IF NOT EXISTS notifications (
@@ -96,33 +112,30 @@ CREATE TABLE IF NOT EXISTS notifications (
     FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE,
     INDEX idx_user_read (user_id, is_read)
 );
+-- Inserir médicos de exemplo
+INSERT INTO doctors (doctor_name, doctor_specialty, doctor_phone, user_id) VALUES 
+('Dr. Carlos Silva', 'Cardiologia', '(11) 9999-8888', 1),
+('Dra. Maria Santos', 'Dermatologia', '(11) 9777-6666', 1);
 
-CREATE TABLE IF NOT EXISTS stock_alerts (
-    alert_id INT AUTO_INCREMENT PRIMARY KEY,
-    med_id INT NOT NULL,
-    user_id INT NOT NULL,
-    alert_type ENUM('low_stock', 'expiring', 'out_of_stock') DEFAULT 'low_stock',
-    alert_message TEXT NOT NULL,
-    is_read BOOLEAN DEFAULT FALSE,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (med_id) REFERENCES medicaments(med_id) ON DELETE CASCADE,
-    FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE,
-    INDEX idx_user_alert (user_id, is_read)
-);
+-- Inserir medicamentos de exemplo
+INSERT INTO medicaments (
+    med_name, med_brand, med_dosage, med_type, med_milligram, med_milligram_unit, 
+    med_time, med_weekdays, med_frequency, med_acquisition_type, med_remaining, 
+    med_alert_days, doctor_id, user_id
+) VALUES 
+('Losartana', 'Genérico', 1.0, 'comprimido', 50, 'mg', '08:00:00', '1,2,3,4,5', 'diario', 'comprado', 30, 7, 1, 1),
+('Sinvastatina', 'Zocor', 1.0, 'comprimido', 20, 'mg', '20:00:00', '1,2,3,4,5', 'diario', 'comprado', 15, 7, 1, 1),
+('Vitamina D', 'Manipulado', 2.0, 'gotas', 1000, 'UI', '12:00:00', '1,3,5', 'diario', 'manipulado', 60, 14, 2, 1);
 
-ALTER TABLE medicaments 
-ADD COLUMN IF NOT EXISTS med_weekdays VARCHAR(20) NOT NULL DEFAULT '1',
-ADD COLUMN IF NOT EXISTS med_alert_days INT DEFAULT 7,
-ADD COLUMN IF NOT EXISTS med_is_active BOOLEAN DEFAULT TRUE;
+-- Inserir consultas de exemplo
+INSERT INTO appointments (
+    appointment_date, appointment_time, appointment_type, appointment_location, 
+    doctor_id, user_id
+) VALUES 
+(CURDATE() + INTERVAL 7 DAY, '14:00:00', 'consulta-rotina', 'Hospital São Paulo', 1, 1),
+(CURDATE() + INTERVAL 14 DAY, '10:30:00', 'retorno', 'Clínica Dermatológica', 2, 1);
 
--- 2. Migrar dados da coluna antiga para a nova
-UPDATE medicaments SET med_weekdays = med_weekday WHERE med_weekdays = '1';
-
--- 3. Remover a coluna antiga (após garantir que a migração funcionou)
--- ALTER TABLE medicaments DROP COLUMN med_weekday;
-
--- 4. Se preferir manter compatibilidade, pode renomear em vez de remover:
-ALTER TABLE medicaments CHANGE med_weekday med_weekday_old INT;
-
--- 5. Criar índice para melhor performance
-CREATE INDEX idx_med_weekdays ON medicaments (med_weekdays);
+-- Inserir histórico de exemplo
+INSERT INTO medication_history (med_id, user_id, taken_at, taken_date, status) VALUES 
+(1, 1, NOW(), CURDATE(), 'taken'),
+(2, 1, NOW() - INTERVAL 1 DAY, CURDATE() - INTERVAL 1 DAY, 'taken');

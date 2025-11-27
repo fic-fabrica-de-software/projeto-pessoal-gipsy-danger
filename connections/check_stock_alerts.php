@@ -1,5 +1,4 @@
 <?php
-// connections/check_stock_alerts.php
 require_once "db.php";
 require_once "common_functions.php";
 
@@ -15,8 +14,6 @@ function checkStockAlerts($user_id = null) {
         $params[] = $user_id;
         $types .= "i";
     }
-    
-    // Buscar medicamentos que precisam de alerta
     $stmt = $conn->prepare("
         SELECT 
             m.med_id,
@@ -43,15 +40,10 @@ function checkStockAlerts($user_id = null) {
     $alerts_created = 0;
     
     while ($med = $result->fetch_assoc()) {
-        // Calcular dias restantes baseado na frequência (simplificado)
-        $remaining_days = $med['med_remaining']; // Aqui poderia ser mais complexo baseado na frequência
-        
-        // Verificar se precisa de alerta
+        $remaining_days = $med['med_remaining'];
         if ($remaining_days <= $med['med_alert_days'] && $med['today_alerts'] == 0) {
             createStockAlert($med);
             $alerts_created++;
-            
-            // Atualizar data do último alerta
             updateLastAlertDate($med['med_id']);
         }
     }
@@ -69,11 +61,11 @@ function createStockAlert($medication) {
     
     if ($days_remaining <= 0) {
         $alert_type = 'out_of_stock';
-        $message = "🚨 ESTOQUE ESGOTADO: {$medication['med_name']} - É necessário $acquisition_type mais.";
+        $message = "ESTOQUE ESGOTADO: {$medication['med_name']} - É necessário $acquisition_type mais.";
     } else if ($days_remaining <= 3) {
-        $message = "⚠️ ESTOQUE CRÍTICO: {$medication['med_name']} - Apenas {$days_remaining} dias restantes. É urgente $acquisition_type mais.";
+        $message = "ESTOQUE CRÍTICO: {$medication['med_name']} - Apenas {$days_remaining} dias restantes. É urgente $acquisition_type mais.";
     } else {
-        $message = "📢 ALERTA DE ESTOQUE: {$medication['med_name']} - {$days_remaining} dias restantes. Lembre-se de $acquisition_type mais.";
+        $message = "ALERTA DE ESTOQUE: {$medication['med_name']} - {$days_remaining} dias restantes. Lembre-se de $acquisition_type mais.";
     }
     
     $stmt = $conn->prepare("
@@ -106,7 +98,6 @@ function updateLastAlertDate($med_id) {
     $stmt->close();
 }
 
-// Executar verificação de alertas
 if (isset($_GET['check_alerts']) && $_GET['check_alerts'] == 'true') {
     session_start();
     

@@ -1,5 +1,4 @@
 <?php
-// connections/get_stock_alerts.php
 require_once "db.php";
 require_once "common_functions.php";
 session_start();
@@ -14,7 +13,6 @@ if (!isset($_SESSION["conected"]) || $_SESSION["conected"] !== true) {
 $user_id = $_SESSION["user_id"];
 
 try {
-    // Buscar alertas não lidos
     $alerts_stmt = $conn->prepare("
         SELECT 
             sa.*,

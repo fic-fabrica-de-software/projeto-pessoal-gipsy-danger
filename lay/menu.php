@@ -6,9 +6,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="../css/style.css">
     <link rel="stylesheet" href="../css/menu.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200..1000;1,200..1000&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
     <title>MedSet</title>
 </head>
 
@@ -37,7 +40,10 @@
                             <a class="nav-link fs-5 t1 pt-5" href="../pages/med.php">Medicamentos</a>
                         </li>
                         <li class="nav-item w-75">
-                            <a class="nav-link fs-5 t1 pt-5" href="../pages/att.php">Consultas</a>
+                            <a class="nav-link fs-5 t1 pt-5" href="../pages/appointments.php">Consultas</a>
+                        </li>
+                        <li class="nav-item w-75">
+                            <a class="nav-link fs-5 t1 pt-5" href="../pages/doctors.php">Médicos</a>
                         </li>
                     </ul>
                     <div class="">
