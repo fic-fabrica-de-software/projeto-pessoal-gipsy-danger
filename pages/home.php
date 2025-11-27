@@ -1,10 +1,13 @@
 <?php
 session_start();
+require_once("../connections/db.php");
+require_once("../connections/common_functions.php");
 
 if (!isset($_SESSION["conected"]) || $_SESSION["conected"] !== true) {
     header("Location: ../index.php");
     exit;
 }
+
 include('../lay/menu.php');
 ?>
 
@@ -24,154 +27,131 @@ include('../lay/menu.php');
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
-    <title>Status</title>
+    <title>Dashboard - MedSet</title>
 </head>
 
-<body class="bg2 min-vh-100 d-flex flex-column justify-content-center">
-    <div class="container bgcont rounded d-flex flex-column gap-4">
-        <div class="w-100 h-50 d-flex align-items-bottom justify-content-evenly p-2">
+<body class="bg2 min-vh-100 d-flex justify-content-center align-items-center">
+    <div class="container bgcont rounded d-flex flex-column gap-4 p-4 m-0">
+        <div id="alertContainer"></div>
 
-            <div class="bg1 w-25 rounded medout"></div>
+        <div class="w-100 d-flex align-items-center justify-content-between gap-5">
+            <div class="bg1 w-25 rounded p-3 h-100">
+                <div id="statsContainer" class="h-100">
+                    <div class="text-center">
+                        <div class="spinner-border spinner-border-sm t1" role="status">
+                            <span class="visually-hidden">Carregando...</span>
+                        </div>
+                        <small class="t1">Carregando estatísticas...</small>
+                    </div>
+                </div>
+            </div>
 
-            <div class="w-50 h-100 d-flex justify-content-evenly">
-                <div class="w-100 h-100 d-flex flex-column">
-                    <div class="w-100 d-flex align-items-center p-0 ps-2 pe-2 justify-content-between">
-                        <button class="btn p-0" data-bs-toggle="modal" data-bs-target="#criarChamadoModal">
+            <div class="w-100 h-100 d-flex justify-content-evenly">
+                <div class="h-100 w-100 d-flex flex-column">
+                    <div class="d-flex align-items-center justify-content-between">
+                        <button class="btn p-0" data-bs-toggle="modal" data-bs-target="#addMedModal">
                             <i class="bi bi-plus-circle icon_plus"></i>
                         </button>
-                        <h3 class="w-100 m-0 text-end">Próximos Medicamentos</h3>
+                        <h3 class="m-0 text-end">Medicamentos de Hoje</h3>
+                        <button class="btn icon_re" id="refreshMeds">
+                            <i class="bi bi-arrow-clockwise"></i>
+                        </button>
                     </div>
-
-                    <div class="modal fade" id="criarChamadoModal" tabindex="-1"
-                        aria-labelledby="criarChamadoModalLabel" aria-hidden="true">
-                        <div class="modal-dialog">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h5 class="modal-title" id="criarChamadoModalLabel">Adicionar Medicamento</h5>
-                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                        aria-label="Close"></button>
-                                </div>
-                                <form action="../connections/create_med.php" method="POST">
-                                    <div class="modal-body">
-                                        <div class="mb-3">
-                                            <label for="med_nome" class="form-label">Nome</label>
-                                            <input type="text" class="form-control" id="med_nome" name="med_nome"
-                                                required>
-                                        </div>
-                                        <div class="mb-3">
-                                            <label for="med_brand" class="form-label">Marca</label>
-                                            <input class="form-control" id="med_brand" name="med_brand" rows="3"
-                                                required></input>
-                                        </div>
-                                        <div class="mb-3">
-                                            <label class="form-label">Dosagem</label>
-                                            <div class="mb-1 d-flex gap-2">
-                                                <input type="number" class="form-control" id="med_dosage"
-                                                    name="med_dosage" required>
-                                                <select class="form-select" id="med_type" name="med_type" required>
-                                                    <option value="capsulas">Cápsulas</option>
-                                                    <option value="comprimidos">Comprimidos</option>
-                                                    <option value="gotas">Gotas</option>
-                                                </select>
-                                            </div>
-                                            <div class="mb-1 d-flex gap-2">
-                                                <input type="number" class="form-control" id="med_milligram"
-                                                    name="med_milligram" required>
-                                                <select class="form-select" id="med_milligram_unit" name="med_milligram_unit" required>
-                                                    <option value="mg">mg</option>
-                                                    <option value="g">g</option>
-                                                    <option value="ml">ml</option>
-                                                </select>
-                                            </div>
-
-                                        </div>
-                                        <div class="mb-3">
-                                            <label class="form-label">Dias e Horários</label>
-                                            <div class="mb-1 d-flex gap-2">
-                                                <input type="number" class="form-control" id="med_dosage"
-                                                    name="med_dosage" required>
-                                                <select class="form-select" id="med_type" name="med_type" required>
-                                                    <option value="capsulas">Cápsulas</option>
-                                                    <option value="comprimidos">Comprimidos</option>
-                                                    <option value="gotas">Gotas</option>
-                                                </select>
-                                            </div>
-                                            <div class="mb-1 d-flex gap-2">
-                                                <input type="number" class="form-control" id="med_milligram"
-                                                    name="med_milligram" required>
-                                                <select class="form-select" id="med_milligram_unit" name="med_milligram_unit" required>
-                                                    <option value="mg">mg</option>
-                                                    <option value="g">g</option>
-                                                    <option value="ml">ml</option>
-                                                </select>
-                                            </div>
-                                            
-                                        </div>
-                                    </div>
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary"
-                                            data-bs-dismiss="modal">Cancelar</button>
-                                        <button type="submit" class="btn btn-primary">Criar Chamado</button>
-                                    </div>
-                                </form>
-                            </div>
-                        </div>
-                    </div>
-
-
-
-                    <div class="bg3 w-100 h-100 rounded">
-                        <div class="table-container p-3">
-                            <table class="table table-hover">
+                    <div class="bg3 rounded flex-grow-1">
+                        <div class="table-container p-3 h-100">
+                            <table class="table table-hover m-0 h-100">
                                 <thead>
-                                    <tr class="">
-                                        <th scope="col" class="table_med">Medicamento</th>
-                                        <th scope="col" class="table_med">Dosagem</th>
-                                        <th scope="col" class="table_med text-center">Horário</th>
-                                        <th scope="col" class="table_med text-end">Confirmar</th>
+                                    <tr class="table_med">
+                                        <th scope="col">Medicamento</th>
+                                        <th scope="col">Dosagem</th>
+                                        <th scope="col" class="text-center">Horário</th>
+                                        <th scope="col" class="text-center">Status</th>
+                                        <th scope="col" class="text-end">Ações</th>
                                     </tr>
                                 </thead>
-                                <tbody>
-                                    <?php
-                                    include('../connections/get_med_home.php');
-                                    if (!empty($medicamento)) {
-                                        foreach ($medicamento as $linha) {
-                                            echo "<tr>";
-                                            echo "<td>" . htmlspecialchars($linha['med_name']) . "</td>";
-                                            echo "<td>" . htmlspecialchars($linha['med_dosage']) . "</td>";
-                                            echo "<td>" . htmlspecialchars($linha['med_time']) . "</td>";
-                                            echo "<td><button class='btn btn-success btn-sm'>Confirmar</button></td>";
-                                            echo "</tr>";
-                                        }
-                                    }
-                                    ?>
+                                <tbody id="todayMedsContainer">
+                                    <tr>
+                                        <td colspan="5" class="text-center py-4">
+                                            <div class="spinner-border text-primary" role="status">
+                                                <span class="visually-hidden">Carregando...</span>
+                                            </div>
+                                            <p class="text-muted mt-2">Carregando medicamentos...</p>
+                                        </td>
+                                    </tr>
                                 </tbody>
                             </table>
                         </div>
                     </div>
                 </div>
             </div>
-
         </div>
-        <div class="w-100 h-50 d-flex align-items-end justify-content-evenly p-2">
 
-            <div class="w-50 h-100 d-flex justify-content-evenly align-items-center">
-                <div class="w-100 h-100 d-flex flex-column">
-                    <div class="w-100 d-flex align-items-center">
-                        <h3 class="">Próximas Consultas</h3>
+        <div class="w-100 d-flex align-items-bottom justify-content-between gap-5">
+            <div class=" h-100 w-75 d-flex justify-content-evenly align-items-center">
+                <div class="h-100 w-100 d-flex flex-column">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h3 class="m-0">Próximas Consultas</h3>
+                        <button class="btn icon_re" id="refreshAppointments">
+                            <i class="bi bi-arrow-clockwise"></i>
+                        </button>
                     </div>
-                    <div class="bg4 w-100 h-100 rounded scrolly">
+                    <div class="bg4 rounded flex-grow-1 scrolly">
+                        <div class="p-3" id="upcomingAppointmentsContainer">
+                            <div class="text-center py-4">
+                                <div class="spinner-border text-primary" role="status">
+                                    <span class="visually-hidden">Carregando...</span>
+                                </div>
+                                <p class="text-muted mt-2">Carregando consultas...</p>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
 
-            <div class="bg1 w-25 h-100 rounded"></div>
+            <div class="bg1 w-25 h-100 rounded p-3">
+                <div class="mt-4">
+                    <h6 class="border-bottom pb-2">Notificações</h6>
+                    <div id="notificationsContainer" class="small">
+                    </div>
+                </div>
+            </div>
 
         </div>
     </div>
+
+    <?php include('../modals/add_med_modal.php'); ?>
+
+    <div class="modal fade" id="confirmModal" tabindex="-1">
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Confirmar Medicamento</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <p id="confirmMessage">Deseja confirmar a tomada deste medicamento?</p>
+                    <div class="mb-3">
+                        <label for="confirmNotes" class="form-label">Observações (opcional):</label>
+                        <textarea class="form-control" id="confirmNotes" rows="2"></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-success" id="confirmTakeBtn">
+                        <i class="bi bi-check-lg"></i> Confirmar
+                    </button>
+                    <button type="button" class="btn btn-warning" id="confirmSkipBtn">
+                        <i class="bi bi-x-lg"></i> Pular
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
         crossorigin="anonymous"></script>
+    <script src="../js/home.js"></script>
 </body>
 
 </html>
